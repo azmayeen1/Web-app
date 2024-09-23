@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #eaeaea;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calculator {
+            background-color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 350px;
+        }
+
+        .display {
+            background-color: #000;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 32px;
+            text-align: right;
+            color: #00FF00;
+            margin-bottom: 20px;
+            height: 60px;
+            overflow: hidden;
+        }
+
+        .keys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+        }
+
+        button {
+            padding: 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background-color: #555;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #777;
+        }
+
+        button.operator {
+            background-color: #ff9500;
+        }
+
+        button.equal {
+            background-color: #00cc99;
+            grid-column: span 2;
+        }
+
+        button.clear {
+            background-color: #ff3b30;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="keys">
+            <button class="clear" onclick="clearDisplay()">AC</button>
+            <button onclick="appendValue('(')"> ( </button>
+            <button onclick="appendValue(')')"> ) </button>
+            <button class="operator" onclick="appendValue('/')"> ÷ </button>
+
+            <button onclick="appendValue(7)">7</button>
+            <button onclick="appendValue(8)">8</button>
+            <button onclick="appendValue(9)">9</button>
+            <button class="operator" onclick="appendValue('*')"> × </button>
+
+            <button onclick="appendValue(4)">4</button>
+            <button onclick="appendValue(5)">5</button>
+            <button onclick="appendValue(6)">6</button>
+            <button class="operator" onclick="appendValue('-')"> − </button>
+
+            <button onclick="appendValue(1)">1</button>
+            <button onclick="appendValue(2)">2</button>
+            <button onclick="appendValue(3)">3</button>
+            <button class="operator" onclick="appendValue('+')"> + </button>
+
+            <button onclick="appendValue(0)">0</button>
+            <button onclick="appendValue('.')">.</button>
+            <button class="operator" onclick="calculateResult()"> = </button>
+            <button onclick="appendValue('sqrt(')"> √ </button>
+
+            <button onclick="appendValue('sin(')"> sin </button>
+            <button onclick="appendValue('cos(')"> cos </button>
+            <button onclick="appendValue('tan(')"> tan </button>
+            <button onclick="appendValue('^')"> x² </button>
+
+            <button onclick="appendValue('%')"> % </button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let currentExpression = '';
+
+        function appendValue(value) {
+            if (display.innerHTML === '0' || display.innerHTML === 'Error') {
+                display.innerHTML = '';
+            }
+            currentExpression += value;
+            display.innerHTML = currentExpression;
+        }
+
+        function clearDisplay() {
+            currentExpression = '';
+            display.innerHTML = '0';
+        }
+
+        function calculateResult() {
+            try {
+                // Replace functions and operators for eval
+                currentExpression = currentExpression.replace(/sqrt\(/g, 'Math.sqrt(')
+                                                      .replace(/\^/g, '**')
+                                                      .replace(/sin\(/g, 'Math.sin(')
+                                                      .replace(/cos\(/g, 'Math.cos(')
+                                                      .replace(/tan\(/g, 'Math.tan(');
+
+                const result = eval(currentExpression);
+                display.innerHTML = result;
+                currentExpression = result.toString();
+            } catch (error) {
+                display.innerHTML = 'Error';
+                currentExpression = '';
+            }
+        }
+    </script>
+
+</body>
+</html>
